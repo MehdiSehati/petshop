@@ -1,39 +1,39 @@
-import React, { Component } from "react";
+import React from "react";
 import "./App.css";
-import CardList from "./components/card-list/Card-List.component";
-import { SearchBox } from "./components/search-box/search-box.component";
-
-class App extends Component {
-  constructor() {
-    super();
+import HomePage from "./pages/homepage/homepage.component";
+import Shop from "./pages/Shop/Shop.component";
+import { Switch, Route } from "react-router-dom";
+import Header from "./components/header/header.component";
+import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
+import { auth } from "./firebase/firebase.utils";
+class App extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      monsters: [],
-      searchField: "",
+      currentUser: null,
     };
   }
 
+  unsubscribeFromAuth = null;
   componentDidMount() {
-    fetch("http://jsonplaceholder.typicode.com/users")
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((users) => this.setState({ monsters: users }));
+    this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+      this.setState({ currentUser: user });
+      console.log(user);
+    });
   }
-  handleChange = (e) => this.setState({ searchField: e.target.value });
+
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
   render() {
-    const { monsters, searchField } = this.state;
-    const filteredMonsters = monsters.filter((monster) =>
-      monster.name.toLowerCase().includes(searchField.toLowerCase())
-    );
     return (
-      <div className="App">
-        <h1>Monsters Rolodex</h1>
-        <SearchBox
-          handleChange={this.handleChange}
-          placeholder={"Search Monster here..."}
-        />
-        <CardList monsters={filteredMonsters} />
+      <div>
+        <Header currentuser={this.state.currentUser} />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/shop" component={Shop} />
+          <Route path="/signin" component={SignInAndSignUpPage} />
+        </Switch>
       </div>
     );
   }
