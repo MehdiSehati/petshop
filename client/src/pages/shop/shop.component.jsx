@@ -3,15 +3,10 @@ import { Route } from "react-router-dom";
 import { connect } from "react-redux";
 import CollectionsOverviewContainer from "../../components/collections-overview/collections-overview.container";
 import CollectionPageContainer from "../collection/collection.container";
-import asghar from "../../components/asgharComponent/asghar.component";
-import {
-  selectCollectionIsFetching,
-  selectIsCollectionsLoaded,
-} from "../../redux/shop/shop.selectors";
+
 import { fetchCollectionsStart } from "../../redux/shop/shop.actions";
 
 const ShopPage = ({ fetchCollectionsStart, match }) => {
-  unsubscribeFromSnapshot = null;
   useEffect(() => {
     fetchCollectionsStart();
   }, [fetchCollectionsStart]);
@@ -28,7 +23,6 @@ const ShopPage = ({ fetchCollectionsStart, match }) => {
         path={`${match.path}/:collectionId`}
         component={CollectionPageContainer}
       />
-      <Route path={`${match.path}/:collectionId/:id`} component={asghar} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+
 import { addItem } from "../../redux/cart/cart.actions";
 import { withRouter } from "react-router-dom";
 
@@ -13,8 +13,8 @@ import {
   PriceContainer,
 } from "./collection-styles.styles";
 
-const CollectionItem = ({ item, addItem, match, title }) => {
-  const { name, price, imageUrl, id } = item;
+const CollectionItem = ({ item, addItem, match }) => {
+  const { name, price, imageUrl } = item;
 
   return (
     <CollectionItemContainer>
